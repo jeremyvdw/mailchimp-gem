@@ -45,10 +45,10 @@ module Mailchimp
         response
       end
       
-      def method_missing(method, *args)
+      def method_missing(method, *args, &block)
         method = method.to_s.gsub(/\/(.?)/) { "::#{$1.upcase}" }.gsub(/(?:^|_)(.)/) { $1.upcase } #Thanks for the gsub, Rails
         method = method[0].chr.downcase + method[1..-1].gsub(/aim$/i, 'AIM')
-        call(method, *args)
+        call(method, *args, &block)
       end
 
     private
