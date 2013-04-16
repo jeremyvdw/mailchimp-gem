@@ -10,14 +10,26 @@ class ExportTest < Test::Unit::TestCase
       @body = {:apikey => @key, :id => "listid"}
       @returns = Struct.new(:body).new(["array", "entries"].to_json)
     end
+
     should 'allow timeout option through constructor' do
       @api = Mailchimp::Export.new(@key, :timeout => 200)
       expect_post(@url, @body, 200)
       @api.list(:id => "listid")
     end
+
     should 'allow timeout option through params' do
       expect_post(@url, @body, 180)
       @api.list(:id => "listid", :timeout => 180)
+    end
+
+    should "stream response body if a block is passed to the request" do
+      expect_post(@url, @body, 180, @returns)
+
+      called = false
+      handler = lambda { |chunk| called = true }
+      @api.list(:id => "listid", :timeout => 180, &handler)
+
+      assert called
     end
 
     should "not throw exception if the Export API replies with a JSON hash containing a key called 'error'" do
@@ -37,15 +49,18 @@ class ExportTest < Test::Unit::TestCase
         @api.say_hello(@body)
       end
     end
+
   end
+
   private
 
-  def expect_post(expected_url, expected_body, expected_timeout=nil)
+  def expect_post(expected_url, expected_body, expected_timeout=nil, return_body=nil)
+    response = return_body || Struct.new(:body).new("")
     Mailchimp::Export.expects(:post).with do |url, opts|
       url == expected_url &&
       opts[:body] == expected_body &&
       opts[:timeout] == expected_timeout
-    end.returns(Struct.new(:body).new("") )
+    end.returns(response)
   end
 
 end
