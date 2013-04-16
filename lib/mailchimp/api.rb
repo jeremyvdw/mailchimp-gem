@@ -34,9 +34,9 @@ module Mailchimp
       response = self.class.post(api_url, :body => CGI::escape(params.to_json), :timeout => timeout)
 
       begin
-        response = JSON.parse(response.body)
+        response = MultiJson.decode(response.body)
       rescue
-        response = JSON.parse('['+response.body+']').first
+        response = MultiJson.decode('['+response.body+']').first
       end
 
       if @throws_exceptions && response.is_a?(Hash) && response["error"]

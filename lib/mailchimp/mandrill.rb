@@ -17,7 +17,7 @@ module Mailchimp
     end
     
     def valid_api_key?(*args)
-      '"PONG!"' == self.users_ping
+      "PONG!" == self.users_ping
     end
     
     def call(method, params = {})

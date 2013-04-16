@@ -16,7 +16,7 @@ module Mailchimp
 
       lines = response.body.lines
       if @throws_exceptions
-        first_line_object = JSON.parse(lines.first) if lines.first
+        first_line_object = MultiJson.decode(lines.first) if lines.first
         raise "Error from MailChimp Export API: #{first_line_object["error"]} (code #{first_line_object["code"]})" if first_line_object.is_a?(Hash) && first_line_object["error"]
       end
 
