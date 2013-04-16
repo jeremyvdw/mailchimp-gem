@@ -12,7 +12,7 @@ class ApiIntegrationTest < Test::Unit::TestCase
     
     m = Mailchimp::API.new('abc123-us1')
     assert_equal "Everything's Chimpy!", m.ping
-    assert_equal expected_request, JSON.parse(URI::decode(FakeWeb.last_request.body))
+    assert_equal expected_request, MultiJson.decode(URI::decode(FakeWeb.last_request.body))
   end
 
 end

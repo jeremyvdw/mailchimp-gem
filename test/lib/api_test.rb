@@ -143,7 +143,7 @@ class ApiTest < Test::Unit::TestCase
   def expect_post(expected_url, expected_body, expected_timeout=nil)
     Mailchimp::API.expects(:post).with do |url, opts|
       url == expected_url &&
-      JSON.parse(URI::decode(opts[:body])) == expected_body &&
+      MultiJson.decode(URI::decode(opts[:body])) == expected_body &&
       opts[:timeout] == expected_timeout
     end.returns(Struct.new(:body).new("") )
   end

@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   
   s.add_dependency('httparty')
+  s.add_dependency('multi_json')
   
   s.add_development_dependency('ruby-debug19')
   s.add_development_dependency('rake')
